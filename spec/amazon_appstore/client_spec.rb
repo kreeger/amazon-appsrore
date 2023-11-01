@@ -88,12 +88,20 @@ RSpec.describe AmazonAppstore::Client do
                                              client_credentials: creds)
     end
 
-    describe 'edits functionality' do
+    describe 'edit functionality' do
       it 'fetches latest active edit' do
         stub_request(:get, "#{base_url}/#{app_id}/edits")
           .to_return_json(status: 200, body: {})
 
         result = @instance.get_active_edit(app_id: app_id)
+        expect(result).to be nil
+      end
+
+      it 'fetches previous active edit' do
+        stub_request(:get, "#{base_url}/#{app_id}/edits/previous")
+          .to_return_json(status: 200, body: {})
+
+        result = @instance.get_previous_edit(app_id: app_id)
         expect(result).to be nil
       end
 
@@ -152,7 +160,7 @@ RSpec.describe AmazonAppstore::Client do
       end
     end
 
-    describe 'listing functionality' do
+    describe 'edit listing functionality' do
       let(:json_data) do
         {
           'language' => 'en-GB',
@@ -205,7 +213,7 @@ RSpec.describe AmazonAppstore::Client do
       end
     end
 
-    describe 'details functionality' do
+    describe 'edit detail functionality' do
       let(:json_data) do
         {
           'defaultLanguage' => 'en-US',
@@ -236,7 +244,7 @@ RSpec.describe AmazonAppstore::Client do
       end
     end
 
-    describe 'APK functionality' do
+    describe 'edit APK functionality' do
       let(:apk_filepath) { File.expand_path(File.join(__dir__, '..', 'fixtures', 'mock-app.apk')) }
       let(:apk_id) { 'M8FYZDFK0GJG0' }
       let(:json_data) do

@@ -91,6 +91,18 @@ module AmazonAppstore
       edit.empty? ? nil : Edit.new(edit)
     end
 
+    # Returns information about the previous edit for the app, if an active edit
+    # exists. Note: returns an empty response if no open edit exists.
+    #
+    # @param [String] app_id The package name or app identifier for the app
+    #
+    # @return [Edit]
+    def get_previous_edit(app_id:)
+      edit, etag = do_get("v1/applications/#{app_id}/edits/previous")
+      @etag_cache[edit['id']] = etag
+      edit.empty? ? nil : Edit.new(edit)
+    end
+
     # Creates a new edit (upcoming release) for an existing app. The Edit is
     # populated with values from the live version of the app. Note: An app can
     # have only one edit open at once. This operation fails if an edit already
