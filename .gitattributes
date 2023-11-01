@@ -1,0 +1,11 @@
+.github/** linguist-vendored
+.devcontainer/** linguist-documentation
+.vscode/** linguist-vendored
+bin/** linguist-vendored
+spec/fixtures/** linguist-vendored
+.rspec linguist-vendored
+.rubocop.yml linguist-vendored
+CHANGELOG.md linguist-vendored
+CODE_OF_CONDUCT.md linguist-vendored
+LICENSE.txt linguist-vendored
+README.md linguist-vendored
