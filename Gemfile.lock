@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    amazon_appstore (0.1.0)
+    amazon_appstore_submission (0.1.0)
       multipart-post (~> 2.0)
 
 GEM
@@ -110,7 +110,7 @@ PLATFORMS
   aarch64-linux
 
 DEPENDENCIES
-  amazon_appstore!
+  amazon_appstore_submission!
   debug (~> 1.7)
   rake (~> 13.0)
   rspec (~> 3.0)

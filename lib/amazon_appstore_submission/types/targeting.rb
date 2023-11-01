@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes availability for an `Edit`.
   class Targeting
     # Describes a targetable device.
@@ -31,7 +31,7 @@ module AmazonAppstore
         end
 
         def to_s
-          "<AmazonAppstore::Targeting::Device::Reason:#{object_id} " \
+          "<AmazonAppstoreSubmission::Targeting::Device::Reason:#{object_id} " \
             "reason=>\"#{reason}\">"
         end
       end
@@ -74,7 +74,7 @@ module AmazonAppstore
       end
 
       def to_s
-        "<AmazonAppstore::Targeting::Device:#{object_id} " \
+        "<AmazonAppstoreSubmission::Targeting::Device:#{object_id} " \
           "id=>\"#{id}\" " \
           "name=>\"#{name}\" " \
           "status=>\"#{status}\">"
@@ -108,7 +108,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::Targeting:#{object_id} " \
+      "<AmazonAppstoreSubmission::Targeting:#{object_id} " \
         "amazon_devices=>#{amazon_devices} " \
         "non_amazon_devices=>#{non_amazon_devices}>"
     end

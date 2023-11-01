@@ -4,7 +4,7 @@ require 'net/http'
 require 'net/http/post/multipart'
 require 'json'
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Encapsulates logic for formulating network requests. Agnostic towards
   # reading files and handling etags; just raw verbs, uris, bodies, and headers.
   class Request

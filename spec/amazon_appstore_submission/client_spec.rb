@@ -3,12 +3,12 @@
 require 'date'
 
 # rubocop:disable Metrics/BlockLength
-RSpec.describe AmazonAppstore::Client do
+RSpec.describe AmazonAppstoreSubmission::Client do
   let(:app_id) { 'amzn1.devportal.mobileapp.abc' }
 
   describe '.new' do
     it 'can be configured directly' do
-      instance = AmazonAppstore::Client.new(client_id: 'other-id', client_secret: 'other-secret')
+      instance = AmazonAppstoreSubmission::Client.new(client_id: 'other-id', client_secret: 'other-secret')
       expect(instance.client_id).to eq('other-id')
       expect(instance.client_secret).to eq('other-secret')
 
@@ -21,7 +21,7 @@ RSpec.describe AmazonAppstore::Client do
 
   describe 'authentication functionality' do
     before(:each) do
-      @instance = AmazonAppstore::Client.new(client_id: 'other-id', client_secret: 'other-secret')
+      @instance = AmazonAppstoreSubmission::Client.new(client_id: 'other-id', client_secret: 'other-secret')
       stub_request(:post, 'https://api.amazon.com/auth/o2/token')
         .to_return_json(status: 200, body: {
                           access_token: 'abc123',
@@ -50,7 +50,7 @@ RSpec.describe AmazonAppstore::Client do
       it 'kicks off a call to the Amazon API to authenticate' do
         expect(@instance.needs_authentication?).to be true
         response = @instance.authenticate!
-        expect(response).to eq(AmazonAppstore::ClientCredentials.new(
+        expect(response).to eq(AmazonAppstoreSubmission::ClientCredentials.new(
                                  {
                                    'access_token' => 'abc123',
                                    'scope' => 'appstore::apps:readwrite',
@@ -75,7 +75,7 @@ RSpec.describe AmazonAppstore::Client do
     let(:edit_id) { 'amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328' }
 
     before(:each) do
-      creds = AmazonAppstore::ClientCredentials.new(
+      creds = AmazonAppstoreSubmission::ClientCredentials.new(
         {
           'access_token' => 'jwt.jwt.jwt',
           'scope' => 'appstore::apps:readwrite',
@@ -83,9 +83,11 @@ RSpec.describe AmazonAppstore::Client do
           'expires_in' => 3600
         }
       )
-      @instance = AmazonAppstore::Client.new(client_id: 'other-id',
-                                             client_secret: 'other-secret',
-                                             client_credentials: creds)
+      @instance = AmazonAppstoreSubmission::Client.new(
+        client_id: 'other-id',
+        client_secret: 'other-secret',
+        client_credentials: creds
+      )
     end
 
     describe 'edit functionality' do
@@ -110,7 +112,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: { id: edit_id, status: 'IN_PROGRESS' })
 
         result = @instance.create_edit(app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Edit.new(
+        expect(result).to eq(AmazonAppstoreSubmission::Edit.new(
                                {
                                  'id' => edit_id,
                                  'status' => 'IN_PROGRESS'
@@ -123,7 +125,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: { id: edit_id, status: 'IN_PROGRESS' })
 
         result = @instance.get_edit(edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Edit.new(
+        expect(result).to eq(AmazonAppstoreSubmission::Edit.new(
                                {
                                  'id' => edit_id,
                                  'status' => 'IN_PROGRESS'
@@ -146,7 +148,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: { id: edit_id })
 
         result = @instance.validate_edit(edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Edit.new({ 'id' => edit_id }))
+        expect(result).to eq(AmazonAppstoreSubmission::Edit.new({ 'id' => edit_id }))
       end
 
       it 'commits changes to an edit' do
@@ -156,7 +158,7 @@ RSpec.describe AmazonAppstore::Client do
 
         @instance.etag_cache[edit_id] = 'etag-value'
         result = @instance.commit_edit(edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Edit.new({ 'id' => edit_id }))
+        expect(result).to eq(AmazonAppstoreSubmission::Edit.new({ 'id' => edit_id }))
       end
     end
 
@@ -196,7 +198,7 @@ RSpec.describe AmazonAppstore::Client do
 
         etag_key = [edit_id, 'en-GB'].join('-')
         @instance.etag_cache[etag_key] = 'etag-value'
-        listing = AmazonAppstore::Listing.new(json_data)
+        listing = AmazonAppstoreSubmission::Listing.new(json_data)
         result = @instance.update_listing(listing, edit_id: edit_id, app_id: app_id)
         expect(result.short_description).to eq('Placeholder short description')
       end
@@ -228,7 +230,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.get_details(edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Details.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::Details.new(json_data))
       end
 
       it 'updates details' do
@@ -238,7 +240,7 @@ RSpec.describe AmazonAppstore::Client do
 
         etag_key = [edit_id, 'details'].join('-')
         @instance.etag_cache[etag_key] = 'etag-value'
-        details = AmazonAppstore::Details.new(json_data)
+        details = AmazonAppstoreSubmission::Details.new(json_data)
         result = @instance.update_details(details, edit_id: edit_id, app_id: app_id)
         expect(result.contact_email).to eq('support@oreilly.com')
       end
@@ -260,7 +262,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: [json_data])
 
         result = @instance.get_apks(edit_id: edit_id, app_id: app_id)
-        expect(result).to eq([AmazonAppstore::APKMetadata.new(json_data)])
+        expect(result).to eq([AmazonAppstoreSubmission::APKMetadata.new(json_data)])
       end
 
       it 'gets a single apk' do
@@ -268,7 +270,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.get_apk(apk_id, edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::APKMetadata.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::APKMetadata.new(json_data))
       end
 
       it 'deletes an apk' do
@@ -288,7 +290,7 @@ RSpec.describe AmazonAppstore::Client do
 
         @instance.etag_cache[apk_id] = 'etag-value'
         result = @instance.replace_apk(apk_id, apk_filepath: apk_filepath, edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::APKMetadata.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::APKMetadata.new(json_data))
       end
 
       it 'uploads a large apk' do
@@ -306,7 +308,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.attach_apk(file_id, edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::APKMetadata.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::APKMetadata.new(json_data))
       end
 
       it 'uploads and attaches an apk' do
@@ -314,7 +316,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.upload_apk(apk_filepath, edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::APKMetadata.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::APKMetadata.new(json_data))
       end
     end
 
@@ -448,7 +450,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.get_availability(edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Availability.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::Availability.new(json_data))
       end
 
       it 'updates availability' do
@@ -458,7 +460,7 @@ RSpec.describe AmazonAppstore::Client do
 
         etag_key = [edit_id, 'availability'].join('-')
         @instance.etag_cache[etag_key] = 'etag-value'
-        availability = AmazonAppstore::Availability.new(json_data)
+        availability = AmazonAppstoreSubmission::Availability.new(json_data)
         result = @instance.update_availability(availability, edit_id: edit_id, app_id: app_id)
         expect(result.publishing_date.zone_id).to eq('US/Central')
       end
@@ -485,7 +487,7 @@ RSpec.describe AmazonAppstore::Client do
           .to_return_json(status: 200, body: json_data)
 
         result = @instance.get_targeting(apk_id: apk_id, edit_id: edit_id, app_id: app_id)
-        expect(result).to eq(AmazonAppstore::Targeting.new(json_data))
+        expect(result).to eq(AmazonAppstoreSubmission::Targeting.new(json_data))
       end
 
       it 'updates targeting' do
@@ -495,7 +497,7 @@ RSpec.describe AmazonAppstore::Client do
 
         etag_key = [apk_id, 'targeting'].join('-')
         @instance.etag_cache[etag_key] = 'etag-value'
-        targeting = AmazonAppstore::Targeting.new(json_data)
+        targeting = AmazonAppstoreSubmission::Targeting.new(json_data)
         result = @instance.update_targeting(targeting, apk_id: apk_id, edit_id: edit_id, app_id: app_id)
         expect(result.amazon_devices.count).to eq(1)
         expect(result.non_amazon_devices.count).to eq(0)

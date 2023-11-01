@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes availability for an `Edit`.
   class Availability
     # Describes a date/time and time zone pair, used inside availability information.
@@ -28,7 +28,7 @@ module AmazonAppstore
       end
 
       def to_s
-        "<AmazonAppstore::Availability::DatePair:#{object_id} " \
+        "<AmazonAppstoreSubmission::Availability::DatePair:#{object_id} " \
           "date_time=>#{date_time} " \
           "zone_id=>\"#{zone_id}\">"
       end
@@ -54,7 +54,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::Availability:#{object_id} " \
+      "<AmazonAppstoreSubmission::Availability:#{object_id} " \
         "publishing_date=>#{publishing_date}>"
     end
   end

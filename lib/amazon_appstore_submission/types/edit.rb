@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes a version of an app update; the basis for all modifications
   # against the Amazon App Submission API.
   class Edit
@@ -22,7 +22,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::Edit:#{object_id} id=>\"#{id}\" status=>\"#{status}\">"
+      "<AmazonAppstoreSubmission::Edit:#{object_id} id=>\"#{id}\" status=>\"#{status}\">"
     end
   end
 end

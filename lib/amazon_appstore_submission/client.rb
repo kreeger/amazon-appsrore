@@ -12,7 +12,7 @@ require_relative 'types/edit'
 require_relative 'types/listing'
 require_relative 'request'
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Communicates with the API directly.
   class Client
     # @return [Time] The time when the credentials were last fetched

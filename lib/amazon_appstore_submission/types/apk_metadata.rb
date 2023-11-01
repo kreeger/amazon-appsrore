@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes metadata for an APK.
   class APKMetadata
     # @return [String] The unique identifier of the APK
@@ -24,7 +24,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::APKMetadata:#{object_id} id=>\"#{id}\" " \
+      "<AmazonAppstoreSubmission::APKMetadata:#{object_id} id=>\"#{id}\" " \
         "name=>\"#{name}\" " \
         "version_code=>\"#{version_code}\">"
     end

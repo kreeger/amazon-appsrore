@@ -2,7 +2,7 @@
 
 source 'https://rubygems.org'
 
-# Specify your gem's dependencies in amazon_appstore.gemspec
+# Specify your gem's dependencies in amazon_appstore_submission.gemspec
 gemspec
 
 gem 'debug', '~> 1.7'

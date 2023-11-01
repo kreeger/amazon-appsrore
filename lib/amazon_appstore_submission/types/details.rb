@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes additional metadata that goes along with an `Edit`.
   class Details
     # @return [String] The default language code for the Edit
@@ -40,7 +40,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::Details:#{object_id} " \
+      "<AmazonAppstoreSubmission::Details:#{object_id} " \
         "default_language=>\"#{default_language}\" " \
         "contact_email=>\"#{contact_email}\">"
     end

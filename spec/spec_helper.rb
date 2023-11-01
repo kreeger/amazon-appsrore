@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'amazon_appstore'
+require 'amazon_appstore_submission'
 require 'webmock/rspec'
 
 RSpec.configure do |config|

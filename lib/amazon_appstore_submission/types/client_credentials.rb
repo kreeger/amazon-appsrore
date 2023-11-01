@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes a token and its metadata; used for authenticating with an Amazon API.
   class ClientCredentials
     # @return [String] The actual access token itself
@@ -30,7 +30,7 @@ module AmazonAppstore
     end
 
     def to_s
-      "<AmazonAppstore::ClientCredentials:#{object_id} " \
+      "<AmazonAppstoreSubmission::ClientCredentials:#{object_id} " \
         "access_token=>\"#{access_token}\">"
     end
   end

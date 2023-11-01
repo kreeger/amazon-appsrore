@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module AmazonAppstore
+module AmazonAppstoreSubmission
   # Describes a localized presence of an app `Edit` in the Amazon Appstore.
   class Listing
     # @return [String] The language code of the listing (like en-US)
@@ -57,7 +57,7 @@ module AmazonAppstore
     # rubocop:enable Metrics/AbcSize
 
     def to_s
-      "<AmazonAppstore::Listing:#{object_id} " \
+      "<AmazonAppstoreSubmission::Listing:#{object_id} " \
         "language=>\"#{language}\" " \
         "title=>\"#{title}\">"
     end

@@ -1,4 +1,4 @@
-# amazon_appstore
+# amazon_appstore_submission
 
 This Ruby gem provides a way to communicate with the Amazon Appstore App
 Submission API for creating new versions, uploading APKs, and more.
@@ -10,12 +10,16 @@ Amazon, Inc. or its subsidiaries.
 
 Install the gem and add to the application's Gemfile by executing:
 
-    $ bundle add amazon_appstore
+```bash
+$ bundle add amazon_appstore_submission
+```
 
 If bundler is not being used to manage dependencies, install the gem by
 executing:
 
-    $ gem install amazon_appstore
+```bash
+$ gem install amazon_appstore_submission
+```
 
 ## Usage
 
@@ -30,24 +34,26 @@ ask it to authenticate, which will store the client credentials internally to be
 used with subsequent requests.
 
 ```ruby
-appstore = AmazonAppstore::Client.new(client_id: 'client-id',
-                                      client_secret: 'client-secret')
+appstore = AmazonAppstoreSubmission::Client.new(
+  client_id: 'client-id',
+  client_secret: 'client-secret')
 appstore.authenticate_if_needed
-# =^ returns <AmazonAppstore::ClientCredentials>
+# =^ returns <AmazonAppstoreSubmission::ClientCredentials>
 ```
 
 You can reused saved client credentials as well, if they are still valid.
 
 ```ruby
-credentials = AmazonAppstore::ClientCredentials.new({
+credentials = AmazonAppstoreSubmission::ClientCredentials.new({
   'access_token' => 'abc123',
   'scope' => 'appstore::apps:readwrite',
   'token_type' => 'bearer',
   'expires_in' => 3600
 })
-appstore = AmazonAppstore::Client.new(client_id: 'client-id',
-                                      client_secret: 'client-secret',
-                                      client_credentials: credentials)
+appstore = AmazonAppstoreSubmission::Client.new(
+  client_id: 'client-id',
+  client_secret: 'client-secret',
+  client_credentials: credentials)
 appstore.needs_authentication?
 # =^ returns false
 ```
@@ -72,49 +78,50 @@ Amazon Appstore. In a nutshell:
   availability**, and finally **commit the edit** to submit it to the Appstore
 
 Here is an incredibly basic example of how to accomplish this, with an existing
-authenticated instance of `AmazonAppstore::Client` we're calling `appstore`.
+authenticated instance of `AmazonAppstoreSubmission::Client` we're calling `appstore`.
 
 ```ruby
 app_id = 'amzn1.devportal.mobileapp.abc'
 edit = appstore.create_edit(app_id: app_id)
-# =^ <AmazonAppstore::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328
-#                      status=>IN_PROGRESS>
+# =^ <AmazonAppstoreSubmission::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328
+#                                status=>IN_PROGRESS>
 
 en_us_listing = appstore.get_listing('en-US', edit_id: edit.id, app_id: app_id)
-# =^ <AmazonAppstore::Listing language=>en-US title=>My App>
+# =^ <AmazonAppstoreSubmission::Listing language=>en-US title=>My App>
 en_us_listing.recent_changes = 'Some release notes go here.'
 en_us_listing.full_description = 'In case I want to change my Appstore listing.'
 appstore.update_listing(en_us_listing, edit_id: edit.id, app_id: app_id)
-# =^ <AmazonAppstore::Listing language=>en-US title=>My App>
+# =^ <AmazonAppstoreSubmission::Listing language=>en-US title=>My App>
 
 old_apk = appstore.get_apk('APK1', edit_id: edit.id, app_id: app_id)
-# =^ <AmazonAppstore::APKMetadata id=>APK1 name=>my-app.apk version_code=12345678>
+# =^ <AmazonAppstoreSubmission::APKMetadata id=>APK1 name=>my-app.apk version_code=12345678>
 appstore.replace_apk('APK1',
                      apk_filepath: '../path/to/my-apk.apk',
                      edit_id: edit.id,
                      app_id: app_id)
-# =^ <AmazonAppstore::APKMetadata id=>APK1 name=>my-app.apk version_code=23456789>
+# =^ <AmazonAppstoreSubmission::APKMetadata id=>APK1 name=>my-app.apk version_code=23456789>
 
 availability = appstore.get_availability(edit_id: edit.id, app_id: app_id)
-# =^ <AmazonAppstore::Availability publishing_date=><AmazonAppstore::Availability::DatePair>>
-date = AmazonAppstore::Availability::DatePair.new(date_time: '2022-02-27T15:19:37',
-                                                  zone_id: 'US/Central')
+# =^ <AmazonAppstoreSubmission::Availability publishing_date=><AmazonAppstoreSubmission::Availability::DatePair>>
+date = AmazonAppstoreSubmission::Availability::DatePair.new(
+  date_time: '2022-02-27T15:19:37',
+  zone_id: 'US/Central')
 availability.publishing_date = date
 appstore.update_availability(availability)
-# =^ <AmazonAppstore::Availability publishing_date=><AmazonAppstore::Availability::DatePair>>
+# =^ <AmazonAppstoreSubmission::Availability publishing_date=><AmazonAppstoreSubmission::Availability::DatePair>>
 
 # Validate; this will either return a 403 with a list of errors, or it will
 #   return the same edit you sent
 validated_edit = appstore.validate_edit(edit.id, app_id: app_id)
-# =^ <AmazonAppstore::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328>
+# =^ <AmazonAppstoreSubmission::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328>
 if validated_edit == edit
   submitted_edit = appstore.commit_edit(edit.id, app_id: app_id)
-    # =^ <AmazonAppstore::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328>
+  # =^ <AmazonAppstoreSubmission::Edit id=>amzn1.devportal.apprelease.9fd9ded7f16e4b1ea89dc794b6e04328>
 end
 ```
 
 For more information on what's possible, check out
-`lib/amazon_appstore/client.rb` for fully-documented public methods.
+`lib/amazon_appstore_submission/client.rb` for fully-documented public methods.
 
 ## Development
 
@@ -128,10 +135,10 @@ debugging files and unit tests.
 ## Contributing
 
 Bug reports and pull requests are welcome on GitHub at
-https://github.com/kreeger/amazon_appstore. This project is intended to be a
-safe, welcoming space for collaboration, and contributors are expected to adhere
-to the [code of
-conduct](https://github.com/kreeger/amazon_appstore/blob/main/CODE_OF_CONDUCT.md).
+https://github.com/kreeger/amazon_appstore_submission. This project is intended
+to be a safe, welcoming space for collaboration, and contributors are expected
+to adhere to the [code of
+conduct](https://github.com/kreeger/amazon_appstore_submission/blob/main/CODE_OF_CONDUCT.md).
 
 ## License
 
@@ -140,6 +147,6 @@ License](https://opensource.org/licenses/MIT).
 
 ## Code of Conduct
 
-Everyone interacting in the amazon_appstore project's codebases, issue trackers,
-chat rooms and mailing lists is expected to follow the [code of
-conduct](https://github.com/kreeger/amazon_appstore/blob/main/CODE_OF_CONDUCT.md).
+Everyone interacting in the amazon_appstore_submission project's codebases,
+issue trackers, chat rooms and mailing lists is expected to follow the [code of
+conduct](https://github.com/kreeger/amazon_appstore_submission/blob/main/CODE_OF_CONDUCT.md).
