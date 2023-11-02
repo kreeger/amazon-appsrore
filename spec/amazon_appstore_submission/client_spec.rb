@@ -2,6 +2,8 @@
 
 require 'date'
 
+require_relative '../spec_helper'
+
 # rubocop:disable Metrics/BlockLength
 RSpec.describe AmazonAppstoreSubmission::Client do
   let(:app_id) { 'amzn1.devportal.mobileapp.abc' }

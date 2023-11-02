@@ -6,6 +6,7 @@ source 'https://rubygems.org'
 gemspec
 
 gem 'debug', '~> 1.7'
+gem 'fastlane', '>= 2.216.0'
 gem 'rake', '~> 13.0'
 gem 'rspec', '~> 3.0'
 gem 'rubocop', '~> 1.21'

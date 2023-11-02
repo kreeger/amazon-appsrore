@@ -18,6 +18,12 @@
         },
         {
             "type": "ruby_lsp",
+            "name": "Rspec (Fastlane Plugin)",
+            "request": "launch",
+            "program": "rspec fastlane-plugin-amazon_appstore_submission"
+        },
+        {
+            "type": "ruby_lsp",
             "name": "Attach debugger",
             "request": "attach"
         }

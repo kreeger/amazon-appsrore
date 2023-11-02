@@ -41,11 +41,7 @@ module Fastlane
       # rubocop:disable Naming/PredicateName
       def self.is_supported?(_platform)
         # rubocop:enable Naming/PredicateName
-        # Adjust this if your plugin only works for a particular platform (iOS vs. Android, for example)
-        # See: https://docs.fastlane.tools/advanced/#control-configuration-by-lane-and-by-platform
-        #
-        # [:ios, :mac, :android].include?(platform)
-        true
+        platform == :android
       end
     end
   end
