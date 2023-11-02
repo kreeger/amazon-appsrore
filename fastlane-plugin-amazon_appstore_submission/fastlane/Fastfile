@@ -1,5 +1,0 @@
-# frozen_string_literal: true
-
-lane :test do
-  amazon_appstore_submission
-end
